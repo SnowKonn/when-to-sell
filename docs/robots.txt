@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://snowkonn.github.io/stoploss/sitemap.xml
+Sitemap: https://snowkonn.github.io/when-to-sell/sitemap.xml

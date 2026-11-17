@@ -1,10 +1,10 @@
 {
- "base_url": "https://snowkonn.github.io/stoploss",
+ "base_url": "https://snowkonn.github.io/when-to-sell",
  "series": "Quant, Soon to Know",
  "profile_url": {
   "ko": "https://snowkonn.github.io/",
   "en": "https://snowkonn.github.io/en/"
  },
  "note_url": "https://snowkonn.github.io/study/stoploss-part1-rate.pdf",
- "repo_url": "https://github.com/SnowKonn/stoploss"
+ "repo_url": "https://github.com/SnowKonn/when-to-sell"
 }
