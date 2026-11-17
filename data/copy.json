@@ -9,7 +9,7 @@
   "h_out": "결과",
   "h_now": "지금 위치",
   "h_assume": "가정",
-  "in_note": "시나리오는 투자자가 정합니다. 변동성은 자료에서 잰 값을 불러오거나 직접 넣습니다.",
+  "in_note": "시나리오는 투자자가 정합니다. 변동성은 종목이나 자산군을 골라 자료에서 잰 값을 불러오거나 직접 넣습니다.",
   "f_asset": "자산군",
   "f_window": "측정 기간",
   "w1": "최근 1년",
@@ -58,7 +58,7 @@
     "crypto": "가상자산"
    },
    "psum": "확률 합계 {n}%. 합이 100이 아니면 비율대로 맞춥니다.",
-   "vol_note": "최근 1년 {y1}%, 최근 3년 {y3}%. 마지막 관측일 {d}.",
+   "vol_note": "{name}: 최근 1년 {y1}%, 최근 3년 {y3}%. 마지막 관측일 {d}.",
    "vol_manual": "변동성을 직접 넣었습니다.",
    "err_rows": "시나리오는 둘 이상이어야 합니다.",
    "err_number": "확률과 기대수익률을 숫자로 넣어 주세요.",
@@ -88,10 +88,22 @@
    "now_below": "현재가가 손절선 아래입니다.",
    "now_above": "손절선까지 {d}% 남았습니다.",
    "now_note": "남은 기대 성장률이 양이면 팔 이유가 없습니다. 음으로 돌아서도 손절선에 닿을 때까지는 기다리는 것이 이 계산의 규칙입니다.",
-   "col_p_out": "확률"
+   "col_p_out": "확률",
+   "stock_loading": "종목 목록을 불러오는 중입니다.",
+   "stock_fail": "종목 목록을 불러오지 못했습니다. 변동성을 직접 넣을 수 있습니다.",
+   "stock_none": "찾는 종목이 없습니다.",
+   "stock_count": "{n}개 종목, {d} 기준.",
+   "markets": {
+    "KS": "코스피",
+    "KQ": "코스닥",
+    "US": "미국"
+   }
   },
   "disclaimer": "개인 페이지입니다. 회사의 공식 견해가 아니고 투자 권유도 아닙니다. 입력한 시나리오가 맞다는 가정 아래의 계산입니다.",
-  "updated": "갱신"
+  "updated": "갱신",
+  "f_stock": "종목 검색",
+  "stock_ph": "이름 또는 코드",
+  "stock_hint": "한국 상장 종목과 S&P 500 종목을 찾을 수 있습니다."
  },
  "en": {
   "title": "When to sell · a stop-loss calculator",
@@ -103,7 +115,7 @@
   "h_out": "Result",
   "h_now": "Where it stands",
   "h_assume": "Assumptions",
-  "in_note": "The scenarios are the investor's own. The volatility is loaded from data or typed in.",
+  "in_note": "The scenarios are the investor's own. The volatility is loaded from data, by stock or by asset class, or typed in.",
   "f_asset": "Asset class",
   "f_window": "Window",
   "w1": "Last year",
@@ -152,7 +164,7 @@
     "crypto": "Crypto"
    },
    "psum": "Probabilities sum to {n}%. If the sum is not 100 they are rescaled.",
-   "vol_note": "Last year {y1}%, last three years {y3}%. Last observation {d}.",
+   "vol_note": "{name}: last year {y1}%, last three years {y3}%. Last observation {d}.",
    "vol_manual": "Volatility typed in.",
    "err_rows": "At least two scenarios are needed.",
    "err_number": "Enter numbers for the probabilities and expected returns.",
@@ -182,9 +194,21 @@
    "now_below": "The current price is below the stop.",
    "now_above": "{d}% above the stop.",
    "now_note": "While remaining expected growth is positive there is no reason to sell. After it turns negative, the rule of this calculation still waits until the stop is reached.",
-   "col_p_out": "Probability"
+   "col_p_out": "Probability",
+   "stock_loading": "Loading the list of stocks.",
+   "stock_fail": "The list of stocks could not be loaded. The volatility can be typed in.",
+   "stock_none": "No stock found.",
+   "stock_count": "{n} stocks, as of {d}.",
+   "markets": {
+    "KS": "KOSPI",
+    "KQ": "KOSDAQ",
+    "US": "US"
+   }
   },
   "disclaimer": "A personal page. Not an official view of my employer and not investment advice. The calculation assumes that the scenarios entered are right.",
-  "updated": "Updated"
+  "updated": "Updated",
+  "f_stock": "Find a stock",
+  "stock_ph": "name or ticker",
+  "stock_hint": "Stocks listed in Korea and the S&P 500."
  }
 }

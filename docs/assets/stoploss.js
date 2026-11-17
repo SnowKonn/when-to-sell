@@ -52,7 +52,27 @@
     return { q, D: q.reduce((acc, v, i) => acc + v * S[i].mu, 0) };
   }
 
-  const core = { setup, growth, noStop, hit, best, posterior };
+  // Stock search. rows: [ticker, ko, en, market, vol_1y, vol_3y, last]. Matches the ticker, the code
+  // without its suffix, and either name; a match at the start ranks above a match inside.
+  function searchStocks(rows, query, limit = 8) {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    const scored = [];
+    for (const r of rows) {
+      const t = r[0].toLowerCase(), ko = r[1].toLowerCase(), en = r[2].toLowerCase();
+      let s = -1;
+      if (t === q || t.split(".")[0] === q || ko === q || en === q) s = 0;
+      else if (t.startsWith(q) || ko.startsWith(q) || en.startsWith(q)) s = 1;
+      else if (en.split(/[^a-z0-9]+/).some((w) => w.startsWith(q))) s = 2;
+      else if (ko.includes(q) || en.includes(q) || t.includes(q)) s = 3;
+      // within a rank, the shortest name that contains the query comes first
+      if (s >= 0) scored.push([s, ko.includes(q) ? ko.length : en.includes(q) ? en.length : t.length, r]);
+    }
+    scored.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    return scored.slice(0, limit).map((x) => x[2]);
+  }
+
+  const core = { setup, growth, noStop, hit, best, posterior, searchStocks };
   if (typeof module !== "undefined" && module.exports) { module.exports = core; return; }
 
   // ---------------------------------------------------------------- page
@@ -186,16 +206,69 @@
   for (const a of VOL.assets) (groups[a.group] = groups[a.group] || []).push(a);
   sel.innerHTML = `<option value="">${esc(T_.manual)}</option>` + Object.entries(groups).map(([g, list]) =>
     `<optgroup label="${esc(T_.groups[g] || g)}">${list.map((a) => `<option value="${a.id}">${esc(a[lang] || a.en)}</option>`).join("")}</optgroup>`).join("");
-  function applyAsset() {
-    const a = VOL.assets.find((v) => v.id === sel.value), w = document.querySelector('input[name="win"]:checked').value;
-    const v = a && (a["vol_" + w] ?? a.vol_1y);
+  let picked = null;                                   // { name, vol_1y, vol_3y, last } of the chosen asset class or stock
+  function applyPicked() {
+    const w = document.querySelector('input[name="win"]:checked').value;
+    const v = picked && (picked["vol_" + w] ?? picked.vol_1y);
     if (v) $("sigma").value = (v * 100).toFixed(1);
-    $("vol-note").textContent = a ? fill(T_.vol_note, { y1: num(a.vol_1y * 100, 1), y3: a.vol_3y ? num(a.vol_3y * 100, 1) : "—", d: a.last }) : T_.vol_manual;
+    $("vol-note").textContent = picked
+      ? fill(T_.vol_note, { name: picked.name, y1: num(picked.vol_1y * 100, 1), y3: picked.vol_3y ? num(picked.vol_3y * 100, 1) : "—", d: picked.last })
+      : T_.vol_manual;
     render();
   }
-  sel.addEventListener("change", applyAsset);
-  for (const r of document.querySelectorAll('input[name="win"]')) r.addEventListener("change", applyAsset);
-  $("sigma").addEventListener("input", () => { if (sel.value) { sel.value = ""; $("vol-note").textContent = T_.vol_manual; } });
+  sel.addEventListener("change", () => {
+    const a = VOL.assets.find((v) => v.id === sel.value);
+    picked = a ? { name: a[lang] || a.en, vol_1y: a.vol_1y, vol_3y: a.vol_3y, last: a.last } : null;
+    box.value = ""; closeList();
+    applyPicked();
+  });
+  for (const r of document.querySelectorAll('input[name="win"]')) r.addEventListener("change", applyPicked);
+  $("sigma").addEventListener("input", () => { picked = null; sel.value = ""; box.value = ""; $("vol-note").textContent = T_.vol_manual; });
+
+  // stock search: the table is fetched the first time the box is used
+  const box = $("stock"), list = $("stock-list"), status = $("stock-status");
+  let stocks = null, loading = null, shown = [], active = -1;
+  const nameOf = (r) => (lang === "ko" ? r[1] : r[2]);
+  function load() {
+    if (stocks || loading) return loading;
+    status.textContent = T_.stock_loading;
+    loading = fetch(box.dataset.src).then((res) => { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then((doc) => { stocks = doc.rows; status.textContent = fill(T_.stock_count, { n: num(stocks.length, 0), d: doc.generated }); suggest(); })
+      .catch(() => { loading = null; status.textContent = T_.stock_fail; });
+    return loading;
+  }
+  function closeList() { list.hidden = true; list.innerHTML = ""; shown = []; active = -1; box.setAttribute("aria-expanded", "false"); box.removeAttribute("aria-activedescendant"); }
+  function mark(i) {
+    active = i;
+    [...list.children].forEach((li, k) => li.setAttribute("aria-selected", k === i));
+    if (i >= 0) box.setAttribute("aria-activedescendant", "stock-opt-" + i); else box.removeAttribute("aria-activedescendant");
+  }
+  function suggest() {
+    if (!stocks || document.activeElement !== box) return;
+    shown = searchStocks(stocks, box.value);
+    if (!box.value.trim()) return closeList();
+    list.innerHTML = shown.length
+      ? shown.map((r, i) => `<li role="option" id="stock-opt-${i}" data-i="${i}" aria-selected="false"><span class="nm">${esc(nameOf(r))}</span><span class="tk">${esc(r[0])} · ${esc(T_.markets[r[3]] || r[3])}</span><span class="vl">${num(r[4] * 100, 1)}%</span></li>`).join("")
+      : `<li class="none">${esc(T_.stock_none)}</li>`;
+    list.hidden = false; box.setAttribute("aria-expanded", "true"); mark(shown.length ? 0 : -1);
+  }
+  function choose(i) {
+    const r = shown[i];
+    if (!r) return;
+    picked = { name: `${nameOf(r)} (${r[0]})`, vol_1y: r[4], vol_3y: r[5], last: r[6] };
+    box.value = nameOf(r); sel.value = ""; closeList();
+    applyPicked();
+  }
+  box.addEventListener("focus", load);
+  box.addEventListener("input", (e) => { e.stopPropagation(); load(); suggest(); });
+  box.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" && shown.length) { e.preventDefault(); mark((active + 1) % shown.length); }
+    else if (e.key === "ArrowUp" && shown.length) { e.preventDefault(); mark((active - 1 + shown.length) % shown.length); }
+    else if (e.key === "Enter") { e.preventDefault(); if (active >= 0) choose(active); }
+    else if (e.key === "Escape") closeList();
+  });
+  list.addEventListener("mousedown", (e) => { const li = e.target.closest("li[data-i]"); if (li) { e.preventDefault(); choose(+li.dataset.i); } });
+  box.addEventListener("blur", () => setTimeout(closeList, 120));
 
   const body = document.querySelector("#sc tbody");
   body.innerHTML = DEFAULTS.map(rowHtml).join("");

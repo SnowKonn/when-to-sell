@@ -33,3 +33,15 @@ near(q[0], 0.19, 0.006, "posterior, up"); near(q[1], 0.37, 0.006, "posterior, mi
 
 // every scenario positive: no stop
 if (c.best(c.setup([{ p: 50, R: 0.3 }, { p: 50, R: 0.1 }], 0.2, 1)).kind !== "none") { console.error("FAIL all positive: expected 'none'"); process.exitCode = 1; } else console.log("ok   all scenarios positive: no stop");
+
+// stock search: exact code first, then names that start with the query, then names that contain it
+const rows = [["005930.KS", "삼성전자", "Samsung Electronics", "KS", 0.4, 0.3, "2026-11-17"], ["005935.KS", "삼성전자우", "Samsung Electronics Pref", "KS", 0.35, 0.28, "2026-11-17"],
+  ["006400.KS", "삼성SDI", "Samsung SDI", "KS", 0.5, 0.45, "2026-11-17"], ["NVDA", "Nvidia", "Nvidia", "US", 0.45, 0.5, "2026-11-17"], ["207940.KS", "삼성바이오로직스", "Samsung Biologics", "KS", 0.3, 0.3, "2026-11-17"]];
+const first = (q) => (c.searchStocks(rows, q)[0] || [])[0];
+for (const [q, want] of [["005930", "005930.KS"], ["삼성전자", "005930.KS"], ["nvda", "NVDA"], ["nvid", "NVDA"], ["sdi", "006400.KS"], ["바이오", "207940.KS"]]) {
+  if (first(q) !== want) { console.error(`FAIL search "${q}": got ${first(q)}, want ${want}`); process.exitCode = 1; } else console.log(`ok   search "${q}" -> ${want}`);
+}
+if (c.searchStocks(rows, "삼성").length !== 4 || c.searchStocks(rows, "  ").length !== 0 || c.searchStocks(rows, "zzz").length !== 0) { console.error("FAIL search counts"); process.exitCode = 1; } else console.log("ok   search counts");
+{ const r2 = [["098120.KQ", "마이크로컨텍솔", "Micro Contact Solution", "KQ", 1, 1, "x"], ["MSFT", "Microsoft", "Microsoft", "US", 0.2, 0.2, "x"], ["MU", "Micron Technology", "Micron Technology", "US", 0.5, 0.5, "x"]];
+  const got = c.searchStocks(r2, "micro")[0][0];
+  if (got !== "MSFT") { console.error(`FAIL search "micro": got ${got}, want MSFT`); process.exitCode = 1; } else console.log('ok   search "micro" -> MSFT'); }
