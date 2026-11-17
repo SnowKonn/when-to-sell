@@ -1,0 +1,146 @@
+/* Stop-loss calculator. Colours and type follow snowkonn.github.io. */
+
+:root {
+  --paper: #f5f6f8;
+  --surface: #ffffff;
+  --ink: #101826;
+  --muted: #586273;
+  --rule: #d8dce3;
+  --warn: #b96a00;
+  --link: #1a47c8;
+  --display: "Hahmlet", "Noto Serif KR", serif;
+  --text: "IBM Plex Sans KR", "IBM Plex Sans", "Apple SD Gothic Neo", sans-serif;
+  --measure: 40rem;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0e131b;
+    --surface: #161d28;
+    --ink: #e7ebf1;
+    --muted: #98a3b3;
+    --rule: #2a3442;
+    --warn: #e3a04a;
+    --link: #9bb5ff;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+a { color: var(--link); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: 70rem; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---------- masthead ---------- */
+
+.masthead { padding: 1.25rem 0 0; }
+.masthead .wrap { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.masthead .series { color: var(--muted); font-size: 0.875rem; margin: 0; }
+.lang { display: flex; gap: 0.25rem; font-size: 0.875rem; }
+.lang a, .lang span { padding: 0.25rem 0.6rem; border-radius: 999px; text-decoration: none; color: var(--muted); }
+.lang span[aria-current] { background: var(--ink); color: var(--paper); }
+.lang a:hover { color: var(--ink); }
+
+/* ---------- sections ---------- */
+
+main section { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem 3rem; padding: clamp(3rem, 7vw, 5rem) 0 0; }
+main section > h2 { font-family: var(--display); font-weight: 600; font-size: 1.25rem; line-height: 1.35; margin: 0; align-self: start; position: sticky; top: 1.25rem; }
+main section > h2 small { display: block; font-family: var(--text); font-weight: 400; font-size: 0.8125rem; color: var(--muted); margin-top: 0.25rem; }
+main section > div > p { max-width: var(--measure); margin: 0 0 1rem; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+footer { margin-top: clamp(4rem, 9vw, 7rem); padding: 2rem 0 3rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.8125rem; }
+footer p { max-width: 46rem; margin: 0 0 0.5rem; }
+
+/* ---------- calculator ---------- */
+
+.tool-head { padding: clamp(2rem, 6vw, 4rem) 0 0; }
+.tool-head .back { font-size: 0.875rem; }
+.tool-head h1 { font-family: var(--display); font-weight: 600; font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.1; letter-spacing: -0.01em; margin: 0.75rem 0 0; }
+.tool-head .lede { font-family: var(--display); font-size: clamp(1.125rem, 2vw, 1.375rem); line-height: 1.5; max-width: 36rem; margin: 1.25rem 0 0; }
+
+.tool form { margin: 0; }
+.tool .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1rem 1.25rem; max-width: 46rem; margin: 0 0 1.5rem; }
+.tool label, .tool legend { display: block; font-size: 0.875rem; color: var(--muted); margin: 0 0 0.3rem; padding: 0; }
+.tool fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.tool input[type="number"], .tool input[type="text"], .tool select {
+  width: 100%; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 0.5rem 0.65rem; min-height: 2.75rem;
+}
+.tool input:hover, .tool select:hover { border-color: var(--muted); }
+.tool .radios { display: flex; gap: 1rem; flex-wrap: wrap; min-height: 2.75rem; align-items: center; }
+.tool .radios label { display: inline-flex; gap: 0.4rem; align-items: center; margin: 0; color: var(--ink); font-size: 0.9375rem; }
+.tool .hint { font-size: 0.875rem; color: var(--muted); margin: -0.75rem 0 1.5rem; max-width: var(--measure); }
+.tool .hint.warn { color: var(--warn); }
+
+.tool .scroll { overflow-x: auto; max-width: 46rem; }
+.tool table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+.tool caption { text-align: left; font-size: 0.875rem; color: var(--muted); padding: 0 0 0.4rem; }
+.tool th, .tool td { padding: 0.45rem 0.6rem 0.45rem 0; border-top: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.tool th:first-child, .tool td:first-child { text-align: left; }
+.tool thead th { font-weight: 500; color: var(--muted); font-size: 0.8125rem; border-top: 0; }
+.tool tbody tr:last-child > * { border-bottom: 1px solid var(--rule); }
+.tool table.in td { padding: 0.3rem 0.5rem 0.3rem 0; }
+.tool table.in input { min-width: 5.5rem; }
+.tool table.in td:nth-child(2) input, .tool table.in td:nth-child(3) input { text-align: right; }
+.tool table.out th[scope="row"] { font-weight: 500; }
+.tool button { font: inherit; color: var(--ink); background: none; border: 1px solid var(--rule); border-radius: 999px; padding: 0.35rem 0.9rem; min-height: 2.5rem; cursor: pointer; }
+.tool button:hover { border-color: var(--muted); }
+.tool button.del { border: 0; color: var(--muted); padding: 0.2rem 0.6rem; font-size: 1.125rem; line-height: 1; }
+.tool button.del:hover { color: var(--ink); }
+.tool .actions { margin: 0.75rem 0 0.5rem; }
+
+.tool .big { font-size: clamp(1.375rem, 3vw, 1.875rem); font-weight: 500; line-height: 1.35; margin: 0 0 1rem; max-width: none; }
+.tool .big strong { font-weight: 600; color: var(--link); }
+.tool .big .sub { display: block; font-family: var(--text); font-size: 1rem; color: var(--muted); margin-top: 0.25rem; }
+.tool .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.75rem 1.5rem; max-width: 46rem; margin: 0 0 1.5rem; }
+.tool .facts div { border-top: 1px solid var(--ink); padding-top: 0.5rem; }
+.tool .facts dt { font-size: 0.8125rem; color: var(--muted); }
+.tool .facts dd { margin: 0; font-size: 1.375rem; font-weight: 500; }
+.tool figure { margin: 0 0 1.5rem; max-width: 46rem; }
+.tool figcaption, .tool .note { font-size: 0.875rem; color: var(--muted); max-width: var(--measure); }
+.tool .note { margin: 0.75rem 0 0; }
+.tool .error { color: var(--warn); }
+.tool svg { display: block; width: 100%; height: auto; }
+.tool svg .grid { stroke: var(--rule); stroke-width: 1; }
+.tool svg .tick, .tool svg .lab { fill: var(--muted); font-size: 12px; font-family: var(--text); }
+.tool svg .curve { fill: none; stroke: var(--link); stroke-width: 2.25; stroke-linejoin: round; }
+.tool svg .none { stroke: var(--muted); stroke-width: 1.25; stroke-dasharray: 5 4; }
+.tool svg .at { stroke: var(--link); stroke-width: 1; stroke-dasharray: 2 3; }
+.tool svg .dot { fill: var(--link); stroke: var(--surface); stroke-width: 2; }
+.tool ul.plain { margin: 0 0 1.25rem; padding-left: 1.1rem; max-width: var(--measure); }
+.tool ul.plain li { margin: 0 0 0.4rem; }
+.tool h3 { font-family: var(--text); font-size: 0.9375rem; font-weight: 500; margin: 1.5rem 0 0.5rem; }
+
+/* the result tables scroll inside their own box; the page itself never scrolls sideways */
+.tool section > div, .tool section > h2 { min-width: 0; }
+@media (max-width: 560px) {
+  .tool svg .tick { font-size: 19px; }
+  .tool svg .lab { font-size: 19px; }
+  .tool svg .axis-title { display: none; }
+}
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 760px) {
+  main section { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  main section > h2 { position: static; }
+}
