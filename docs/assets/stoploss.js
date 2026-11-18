@@ -176,11 +176,13 @@
         ${b.kind === "stop" ? `<div><dt>${esc(T_.g_stop)}</dt><dd>${pct(b.g)}</dd></div>
         <div><dt>${esc(T_.p_stop)}</dt><dd>${num(pall * 100, 0)}%</dd></div>` : ""}
       </dl>`;
-    const rows = S.map((s, i) => `<tr><th scope="row">${esc(s.name)}</th><td>${num(s.p * 100, 0)}%</td><td>${pct(s.R)}</td><td>${pct(s.mu)}</td><td>${b.kind === "stop" ? num(ph[i] * 100, 0) + "%" : "—"}</td></tr>`).join("");
+    // the same scenario as a compound return and as an expected value, over the period of the table
+    const comp = (s) => Math.exp(s.mu * inp.T) - 1, mean = (s) => Math.exp((s.mu + inp.sigma * inp.sigma / 2) * inp.T) - 1;
+    const rows = S.map((s, i) => `<tr><th scope="row">${esc(s.name)}</th><td>${num(s.p * 100, 0)}%</td><td>${pct(comp(s))}</td><td>${pct(mean(s))}</td><td>${pct(s.mu)}</td><td>${b.kind === "stop" ? num(ph[i] * 100, 0) + "%" : "—"}</td></tr>`).join("");
     out.innerHTML = `${head}${facts}
       <figure>${chart(S, b)}<figcaption>${esc(T_.chart_cap)}</figcaption></figure>
       <div class="scroll"><table class="out">
-        <thead><tr><th>${esc(T_.col_name)}</th><th>${esc(T_.col_p_out)}</th><th>${esc(T_.col_r_out)}</th><th>${esc(T_.col_mu)}</th><th>${esc(T_.col_hit)}</th></tr></thead>
+        <thead><tr><th>${esc(T_.col_name)}</th><th>${esc(T_.col_p_out)}</th><th>${esc(T_.col_comp)}</th><th>${esc(T_.col_mean)}</th><th>${esc(T_.col_mu)}</th><th>${esc(T_.col_hit)}</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
       <p class="note">${esc(inp.mode === "mean" ? T_.mu_note_mean : T_.mu_note)}</p>`;
 
