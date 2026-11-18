@@ -1,6 +1,6 @@
 """Build the calculator site: Korean at /, English at /en/.
 
-Inputs : data/site.json, data/copy.json, data/vol.json, src/style.css, src/stoploss.js
+Inputs : data/site.json, data/copy.json, data/vol.json, data/stocks.json, src/style.css, src/stoploss.js
 Outputs: docs/  (index.html, en/index.html, assets/, robots.txt, sitemap.xml, .nojekyll)
 No third-party packages. All links between the pages are relative, so the site works
 at any path (GitHub project pages serve it under /<repository>/).
@@ -100,6 +100,13 @@ def _page(lang: str) -> str:
     <div>
       <p>{e(t['in_note'])}</p>
       <form>
+        <div class="search">
+          <label for="stock">{e(t['f_stock'])}</label>
+          <input id="stock" type="search" autocomplete="off" spellcheck="false" placeholder="{e(t['stock_ph'])}" data-src="{prefix}assets/stocks.json"
+                 role="combobox" aria-expanded="false" aria-controls="stock-list" aria-autocomplete="list">
+          <ul id="stock-list" role="listbox" aria-label="{e(t['f_stock'])}" hidden></ul>
+          <p class="hint" id="stock-status" aria-live="polite">{e(t['stock_hint'])}</p>
+        </div>
         <div class="fields">
           <div><label for="asset">{e(t['f_asset'])}</label><select id="asset"></select></div>
           <fieldset><legend>{e(t['f_window'])}</legend><div class="radios">
@@ -115,6 +122,10 @@ def _page(lang: str) -> str:
         </table></div>
         <p class="actions"><button type="button" id="add">{e(t['add'])}</button></p>
         <p class="hint" id="psum" aria-live="polite"></p>
+        <fieldset class="mode"><legend>{e(t['f_mode'])}</legend><div class="radios">
+          <label><input type="radio" name="mode" value="mean" checked> {e(t['mode_mean'])}</label>
+          <label><input type="radio" name="mode" value="compound"> {e(t['mode_compound'])}</label></div></fieldset>
+        <p class="hint">{e(t['mode_hint'])}</p>
         <div class="fields">
           <div><label for="horizon">{e(t['f_horizon'])}</label><input id="horizon" type="number" value="1" min="0.1" max="30" step="0.25" inputmode="decimal"></div>
           <div><label for="entry">{e(t['f_entry'])}</label><input id="entry" type="number" min="0" step="any" inputmode="decimal" placeholder="{e(t['f_entry_ph'])}"></div>
@@ -176,6 +187,7 @@ def main() -> None:
     (OUT / "en").mkdir()
     for name in ("style.css", "stoploss.js"):
         shutil.copy(ROOT / "src" / name, OUT / "assets" / name)
+    shutil.copy(ROOT / "data" / "stocks.json", OUT / "assets" / "stocks.json")   # fetched by the search box
     (OUT / "index.html").write_text(page("ko"))
     (OUT / "en" / "index.html").write_text(page("en"))
     (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")

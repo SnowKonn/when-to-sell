@@ -1,6 +1,6 @@
 name: Refresh volatility table
 
-# Reads daily closes from Yahoo Finance (yfinance), rewrites data/vol.json, rebuilds docs/ and commits.
+# Reads daily closes from Yahoo Finance (yfinance), rewrites data/vol.json and data/stocks.json, rebuilds docs/ and commits.
 on:
   schedule:
     - cron: "30 21 * * 5"        # Saturday 06:30 KST, after the Friday close in New York
@@ -26,15 +26,16 @@ jobs:
           node-version: "22"
       - run: pip install -r requirements.txt
       - run: python tools/update_vol.py
+      - run: python tools/update_stock_vol.py
       - run: node tests/check.js
       - run: python build.py
       - name: Commit if the table changed
         run: |
-          if git diff --quiet -- data/vol.json; then
+          if git diff --quiet -- data/vol.json data/stocks.json; then
             echo "volatility table unchanged"; git checkout -- docs; exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/vol.json docs
-          git commit -m "Refresh volatility table"
+          git add data/vol.json data/stocks.json docs
+          git commit -m "Refresh volatility tables"
           git push

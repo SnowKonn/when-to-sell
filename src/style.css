@@ -138,6 +138,27 @@ footer p { max-width: 46rem; margin: 0 0 0.5rem; }
   .tool svg .axis-title { display: none; }
 }
 
+.tool fieldset.mode { margin: 0.5rem 0 0.25rem; }
+.tool fieldset.mode + .hint { margin-top: 0; }
+
+/* stock search */
+.tool .search { position: relative; max-width: 46rem; margin: 0 0 1.25rem; }
+.tool .search input { width: 100%; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 0.5rem 0.65rem; min-height: 2.75rem; }
+.tool .search .hint { margin: 0.4rem 0 0; }
+.tool #stock-list {
+  position: absolute; z-index: 5; left: 0; right: 0; margin: 0.25rem 0 0; padding: 0.25rem; list-style: none;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  /* stock names are outside the font subset of the page, so the list uses the system font throughout */
+  font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+}
+.tool #stock-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 0 1rem; align-items: baseline; padding: 0.5rem 0.6rem; border-radius: 5px; cursor: pointer; }
+.tool #stock-list li.none { display: block; color: var(--muted); cursor: default; }
+.tool #stock-list li[aria-selected="true"], .tool #stock-list li[data-i]:hover { background: color-mix(in srgb, var(--link) 14%, transparent); }
+.tool #stock-list .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tool #stock-list .tk { color: var(--muted); font-size: 0.8125rem; white-space: nowrap; }
+.tool #stock-list .vl { font-variant-numeric: tabular-nums; min-width: 3.5rem; text-align: right; }
+.tool #vol-note { font-family: system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; }
+
 /* ---------- small screens ---------- */
 
 @media (max-width: 760px) {
