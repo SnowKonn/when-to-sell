@@ -2,9 +2,11 @@
    "When do stop-loss and take-profit rules maximize long-run growth? Part I" (whole account in the
    position, return earned as a rate, exponential horizon with mean T, sale not undone, cash after a sale).
 
-   Scenario s: probability p_s, expected simple return R_s over T years, volatility sigma (per year).
-     alpha_s = log(1 + R_s) / T                       arithmetic rate
-     mu_s    = alpha_s - sigma^2 / 2                  compound rate
+   Scenario s: probability p_s, return R_s over T years, volatility sigma (per year).
+   R_s is the compound return of the scenario: where the price goes if the scenario plays out.
+     mu_s    = log(1 + R_s) / T                       compound rate (the drift of the log price)
+   If R_s is instead an expected value (an arithmetic mean), the compound rate is lower by the
+   volatility drag: mu_s = log(1 + R_s) / T - sigma^2 / 2. That reading is the mode "mean".
      gamma_s = (mu_s + sqrt(mu_s^2 + 2 sigma^2 / T)) / sigma^2
      P_s(a)  = exp(-gamma_s a)                        probability that a stop at log distance a is reached
      g(a)    = sum_s p_s mu_s (1 - P_s(a))            expected growth per year of the view
@@ -13,13 +15,12 @@
 (() => {
   "use strict";
 
-  function setup(scenarios, sigma, T) {
+  function setup(scenarios, sigma, T, mode = "compound") {
     const total = scenarios.reduce((a, s) => a + s.p, 0);
     const s2 = sigma * sigma;
     return scenarios.map((s) => {
-      const alpha = Math.log(1 + s.R) / T;
-      const mu = alpha - s2 / 2;
-      return { name: s.name, p: s.p / total, R: s.R, alpha, mu, gamma: (mu + Math.sqrt(mu * mu + (2 * s2) / T)) / s2 };
+      const mu = Math.log(1 + s.R) / T - (mode === "mean" ? s2 / 2 : 0);
+      return { name: s.name, p: s.p / total, R: s.R, mu, gamma: (mu + Math.sqrt(mu * mu + (2 * s2) / T)) / s2 };
     });
   }
   const growth = (S, a) => S.reduce((acc, s) => acc + s.p * s.mu * (1 - Math.exp(-s.gamma * a)), 0);
@@ -117,7 +118,8 @@
     if (!(sigma > 0 && sigma <= 3)) errors.push(T_.err_sigma);
     if (!(T > 0 && T <= 30)) errors.push(T_.err_horizon);
     const psum = rows.reduce((a, r) => a + (r.p || 0), 0);
-    return { rows, sigma, T, entry: entry > 0 ? entry : null, errors, psum };
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+    return { rows, sigma, T, mode, entry: entry > 0 ? entry : null, errors, psum };
   }
 
   function chart(S, b) {
@@ -158,7 +160,7 @@
       now.innerHTML = "";
       return;
     }
-    const S = setup(inp.rows, inp.sigma, inp.T), b = best(S);
+    const S = setup(inp.rows, inp.sigma, inp.T, inp.mode), b = best(S);
     const stopPct = b.kind === "stop" ? Math.exp(-b.a) - 1 : null;
     let head;
     if (b.kind === "stop") {
@@ -180,7 +182,7 @@
       <div class="scroll"><table class="out">
         <thead><tr><th>${esc(T_.col_name)}</th><th>${esc(T_.col_p_out)}</th><th>${esc(T_.col_r_out)}</th><th>${esc(T_.col_mu)}</th><th>${esc(T_.col_hit)}</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
-      <p class="note">${esc(T_.mu_note)}</p>`;
+      <p class="note">${esc(inp.mode === "mean" ? T_.mu_note_mean : T_.mu_note)}</p>`;
 
     // where the position stands now
     const cur = parseFloat($("cur").value), months = parseFloat($("months").value);

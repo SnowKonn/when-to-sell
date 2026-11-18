@@ -24,7 +24,7 @@
   "f_cur": "현재가",
   "f_months": "진입 후 경과 (개월)",
   "assume": [
-   "수익은 속도로 쌓입니다. 시나리오마다 가격이 일정한 속도로 오르거나 내리고, 그 위에 변동성이 얹힙니다.",
+   "시나리오의 수익률은 그 시나리오가 맞을 때 가격이 가는 곳입니다. 가격은 그곳을 향해 일정한 속도로 움직이고, 그 위에 변동성이 얹힙니다.",
    "시나리오는 평균적으로 표의 기간만큼 이어지고, 언제 끝날지는 미리 알 수 없습니다.",
    "한 번 팔면 다시 사지 않고, 판 돈은 현금으로 둡니다.",
    "계좌 전부를 이 포지션에 넣은 경우입니다."
@@ -44,8 +44,8 @@
    "down": "하락",
    "col_name": "시나리오",
    "col_p": "확률 (%)",
-   "col_r": "기대수익률 (%)",
-   "col_r_out": "기대수익률",
+   "col_r": "수익률 (%)",
+   "col_r_out": "수익률",
    "col_mu": "복리 성장률 (연)",
    "col_hit": "손절에 걸릴 확률",
    "remove": "삭제",
@@ -71,7 +71,7 @@
    "no_stop": "손절선을 두지 않는 편이 낫습니다.",
    "no_stop_why": "어느 손절선도 손절 없이 들고 가는 것보다 성장률을 높이지 못합니다.",
    "avoid": "이 입력에서는 보유하지 않는 편이 낫습니다.",
-   "avoid_why": "어느 손절선에서도 기대 성장률이 양이 되지 않습니다. 변동성이 기대수익을 넘어섭니다.",
+   "avoid_why": "어느 손절선에서도 기대 성장률이 양이 되지 않습니다.",
    "g_none": "손절 없을 때 성장률 (연)",
    "g_stop": "손절선을 둘 때 성장률 (연)",
    "p_stop": "손절에 걸릴 확률",
@@ -79,7 +79,7 @@
    "chart_x": "손절선 (진입가 대비)",
    "chart_none": "손절 없음",
    "chart_cap": "손절선 위치에 따른 기대 성장률(연). 점이 가장 높은 곳입니다.",
-   "mu_note": "복리 성장률은 기대수익률을 연 로그 수익률로 바꾼 뒤 변동성의 제곱의 절반을 뺀 값입니다.",
+   "mu_note": "복리 성장률은 입력한 수익률을 연 로그 수익률로 바꾼 값입니다.",
    "now_hint": "진입가, 현재가, 경과 기간을 넣으면 계산합니다.",
    "now_ret": "진입 후 수익률",
    "now_D": "남은 기대 성장률 (연)",
@@ -97,13 +97,18 @@
     "KS": "코스피",
     "KQ": "코스닥",
     "US": "미국"
-   }
+   },
+   "mu_note_mean": "복리 성장률은 기대값을 연 로그 수익률로 바꾼 뒤 변동성의 제곱의 절반을 뺀 값입니다."
   },
   "disclaimer": "개인 페이지입니다. 회사의 공식 견해가 아니고 투자 권유도 아닙니다. 입력한 시나리오가 맞다는 가정 아래의 계산입니다.",
   "updated": "갱신",
   "f_stock": "종목 검색",
   "stock_ph": "이름 또는 코드",
-  "stock_hint": "한국 상장 종목과 S&P 500 종목을 찾을 수 있습니다."
+  "stock_hint": "한국 상장 종목과 S&P 500 종목을 찾을 수 있습니다.",
+  "f_mode": "수익률의 뜻",
+  "mode_compound": "시나리오가 맞으면 가격이 가는 곳 (복리)",
+  "mode_mean": "기대값 (산술 평균)",
+  "mode_hint": "복리로 읽으면 변동성은 가격의 흔들림만 키웁니다. 기대값으로 읽으면 변동성의 제곱의 절반만큼 복리 성장률이 낮아집니다."
  },
  "en": {
   "title": "When to sell · a stop-loss calculator",
@@ -130,7 +135,7 @@
   "f_cur": "Current price",
   "f_months": "Months since entry",
   "assume": [
-   "The return is earned as a rate: in each scenario the price rises or falls at a constant rate, with volatility on top.",
+   "A scenario's return is where the price goes if the scenario is right. The price moves there at a constant rate, with volatility on top.",
    "A scenario lasts for the period of the table on average, and its end is not known in advance.",
    "A sale is not undone, and the proceeds wait in cash.",
    "The whole account is in the position."
@@ -150,8 +155,8 @@
    "down": "Down",
    "col_name": "Scenario",
    "col_p": "Probability (%)",
-   "col_r": "Expected return (%)",
-   "col_r_out": "Expected return",
+   "col_r": "Return (%)",
+   "col_r_out": "Return",
    "col_mu": "Compound growth (a year)",
    "col_hit": "Probability of the stop",
    "remove": "Remove",
@@ -177,7 +182,7 @@
    "no_stop": "No stop-loss is better.",
    "no_stop_why": "No stop raises growth above holding without one.",
    "avoid": "With these inputs it is better not to hold.",
-   "avoid_why": "Expected growth is not positive at any stop. The volatility outweighs the expected return.",
+   "avoid_why": "Expected growth is not positive at any stop.",
    "g_none": "Growth without a stop (a year)",
    "g_stop": "Growth with the stop (a year)",
    "p_stop": "Probability of the stop",
@@ -185,7 +190,7 @@
    "chart_x": "Stop-loss (from the entry price)",
    "chart_none": "No stop",
    "chart_cap": "Expected growth a year by position of the stop. The dot is the highest point.",
-   "mu_note": "Compound growth is the expected return turned into a log return a year, less half the squared volatility.",
+   "mu_note": "Compound growth is the return entered, turned into a log return a year.",
    "now_hint": "Enter the entry price, the current price and the months since entry.",
    "now_ret": "Return since entry",
    "now_D": "Remaining expected growth (a year)",
@@ -203,12 +208,17 @@
     "KS": "KOSPI",
     "KQ": "KOSDAQ",
     "US": "US"
-   }
+   },
+   "mu_note_mean": "Compound growth is the expected value turned into a log return a year, less half the squared volatility."
   },
   "disclaimer": "A personal page. Not an official view of my employer and not investment advice. The calculation assumes that the scenarios entered are right.",
   "updated": "Updated",
   "f_stock": "Find a stock",
   "stock_ph": "name or ticker",
-  "stock_hint": "Stocks listed in Korea and the S&P 500."
+  "stock_hint": "Stocks listed in Korea and the S&P 500.",
+  "f_mode": "What the return means",
+  "mode_compound": "Where the price goes if the scenario is right (compound)",
+  "mode_mean": "An expected value (arithmetic mean)",
+  "mode_hint": "Read as compound, volatility only adds noise around the path. Read as an expected value, compound growth is lower by half the squared volatility."
  }
 }

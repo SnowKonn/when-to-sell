@@ -10,6 +10,8 @@ Inputs: scenarios (probability and expected return each), a volatility, the peri
 
 Outputs: the best fixed stop-loss, expected growth with and without it, the probability of the stop by scenario, a chart of growth against the position of the stop, and the scenario probabilities updated by the price path.
 
+A scenario's return is read as a compound return: where the price goes if the scenario is right. A switch on the page reads it as an expected value instead, which lowers compound growth by half the squared volatility.
+
 The formulas are those of the study note "When do stop-loss and take-profit rules maximize long-run growth? Part I" (https://snowkonn.github.io/study/stoploss-part1-rate.pdf). They assume that the return is earned as a rate, that a scenario lasts for the period of the table on average with an end that is not known in advance, that a sale is not undone and its proceeds wait in cash, and that the whole account is in the position. The page states these assumptions and what changes without them. It is a tool for one's own scenarios, not a forecast and not investment advice.
 
 ## Layout

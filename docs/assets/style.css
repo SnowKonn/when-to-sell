@@ -138,6 +138,9 @@ footer p { max-width: 46rem; margin: 0 0 0.5rem; }
   .tool svg .axis-title { display: none; }
 }
 
+.tool fieldset.mode { margin: 0.5rem 0 0.25rem; }
+.tool fieldset.mode + .hint { margin-top: 0; }
+
 /* stock search */
 .tool .search { position: relative; max-width: 46rem; margin: 0 0 1.25rem; }
 .tool .search input { width: 100%; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 0.5rem 0.65rem; min-height: 2.75rem; }

@@ -122,6 +122,10 @@ def _page(lang: str) -> str:
         </table></div>
         <p class="actions"><button type="button" id="add">{e(t['add'])}</button></p>
         <p class="hint" id="psum" aria-live="polite"></p>
+        <fieldset class="mode"><legend>{e(t['f_mode'])}</legend><div class="radios">
+          <label><input type="radio" name="mode" value="compound" checked> {e(t['mode_compound'])}</label>
+          <label><input type="radio" name="mode" value="mean"> {e(t['mode_mean'])}</label></div></fieldset>
+        <p class="hint">{e(t['mode_hint'])}</p>
         <div class="fields">
           <div><label for="horizon">{e(t['f_horizon'])}</label><input id="horizon" type="number" value="1" min="0.1" max="30" step="0.25" inputmode="decimal"></div>
           <div><label for="entry">{e(t['f_entry'])}</label><input id="entry" type="number" min="0" step="any" inputmode="decimal" placeholder="{e(t['f_entry_ph'])}"></div>
