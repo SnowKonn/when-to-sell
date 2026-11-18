@@ -62,9 +62,9 @@
         <p class="actions"><button type="button" id="add">Add a scenario</button></p>
         <p class="hint" id="psum" aria-live="polite"></p>
         <fieldset class="mode"><legend>What the return means</legend><div class="radios">
-          <label><input type="radio" name="mode" value="compound" checked> Where the price goes if the scenario is right (compound)</label>
-          <label><input type="radio" name="mode" value="mean"> An expected value (arithmetic mean)</label></div></fieldset>
-        <p class="hint">Read as compound, volatility only adds noise around the path. Read as an expected value, compound growth is lower by half the squared volatility.</p>
+          <label><input type="radio" name="mode" value="mean" checked> An expected value (arithmetic mean)</label>
+          <label><input type="radio" name="mode" value="compound"> Where the price goes if the scenario is right (compound)</label></div></fieldset>
+        <p class="hint">Read as an expected value, compound growth is lower by half the squared volatility. Read as compound, volatility only adds noise around the path.</p>
         <div class="fields">
           <div><label for="horizon">Scenario period (years)</label><input id="horizon" type="number" value="1" min="0.1" max="30" step="0.25" inputmode="decimal"></div>
           <div><label for="entry">Entry price</label><input id="entry" type="number" min="0" step="any" inputmode="decimal" placeholder="optional"></div>

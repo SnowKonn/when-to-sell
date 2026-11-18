@@ -3,10 +3,11 @@
    position, return earned as a rate, exponential horizon with mean T, sale not undone, cash after a sale).
 
    Scenario s: probability p_s, return R_s over T years, volatility sigma (per year).
-   R_s is the compound return of the scenario: where the price goes if the scenario plays out.
-     mu_s    = log(1 + R_s) / T                       compound rate (the drift of the log price)
-   If R_s is instead an expected value (an arithmetic mean), the compound rate is lower by the
-   volatility drag: mu_s = log(1 + R_s) / T - sigma^2 / 2. That reading is the mode "mean".
+   The page reads R_s as an expected value (an arithmetic mean), the mode "mean". The price then has the
+   expected rate of return log(1 + R_s) / T, and the log price drifts at
+     mu_s    = log(1 + R_s) / T - sigma^2 / 2         compound rate (the note, from v6.0, writes g_s for it)
+   In the mode "compound" R_s is where the price goes if the scenario plays out, and mu_s = log(1 + R_s) / T.
+   In this file mu always means the drift of the log price.
      gamma_s = (mu_s + sqrt(mu_s^2 + 2 sigma^2 / T)) / sigma^2
      P_s(a)  = exp(-gamma_s a)                        probability that a stop at log distance a is reached
      g(a)    = sum_s p_s mu_s (1 - P_s(a))            expected growth per year of the view

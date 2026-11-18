@@ -6,7 +6,7 @@ const near = (got, want, tol, what) => {
 };
 const table = [{ p: 40, R: 0.40 }, { p: 40, R: 0.10 }, { p: 20, R: -0.35 }];
 
-// The table read as compound returns (the default). Reference values from an independent
+// The table read as compound returns (the default of setup(); the page defaults to "mean"). Reference values from an independent
 // implementation (numpy, scipy): compound rates 33.65%, 9.53%, -43.08%; mean 8.66%.
 let S = c.setup(table, 0.30, 1), b = c.best(S);
 near(S[0].mu, 0.33647, 1e-5, "compound rate, up scenario");
@@ -24,7 +24,7 @@ near(c.best(c.setup(table, 0.757, 1)).g, 0.09589, 5e-5, "volatility 75.7%, growt
 const q = c.posterior(c.setup(table, 0.30, 1), 0.30, Math.log(0.82), 0.25).q;
 near(q[0], 0.1844, 5e-4, "posterior, up"); near(q[1], 0.3627, 5e-4, "posterior, middle"); near(q[2], 0.4528, 5e-4, "posterior, down");
 
-// The same table read as expected values (mode "mean"): the numbers of the study note up to v4
+// The same table read as expected values (mode "mean"): the default of the page; the numbers of the study note (v4.2, v6.0)
 S = c.setup(table, 0.30, 1, "mean"); b = c.best(S);
 near(Math.exp(-b.a) - 1, -0.2507, 5e-4, "expected-value reading, stop");
 near(b.g, 0.08508, 5e-5, "expected-value reading, growth with the stop");

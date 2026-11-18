@@ -62,9 +62,9 @@
         <p class="actions"><button type="button" id="add">시나리오 추가</button></p>
         <p class="hint" id="psum" aria-live="polite"></p>
         <fieldset class="mode"><legend>수익률의 뜻</legend><div class="radios">
-          <label><input type="radio" name="mode" value="compound" checked> 시나리오가 맞으면 가격이 가는 곳 (복리)</label>
-          <label><input type="radio" name="mode" value="mean"> 기대값 (산술 평균)</label></div></fieldset>
-        <p class="hint">복리로 읽으면 변동성은 가격의 흔들림만 키웁니다. 기대값으로 읽으면 변동성의 제곱의 절반만큼 복리 성장률이 낮아집니다.</p>
+          <label><input type="radio" name="mode" value="mean" checked> 기대값 (산술 평균)</label>
+          <label><input type="radio" name="mode" value="compound"> 시나리오가 맞으면 가격이 가는 곳 (복리)</label></div></fieldset>
+        <p class="hint">기대값으로 읽으면 변동성의 제곱의 절반만큼 복리 성장률이 낮아집니다. 복리로 읽으면 변동성은 가격의 흔들림만 키웁니다.</p>
         <div class="fields">
           <div><label for="horizon">시나리오 기간 (년)</label><input id="horizon" type="number" value="1" min="0.1" max="30" step="0.25" inputmode="decimal"></div>
           <div><label for="entry">진입가</label><input id="entry" type="number" min="0" step="any" inputmode="decimal" placeholder="선택"></div>

@@ -110,7 +110,7 @@
   "f_mode": "수익률의 뜻",
   "mode_compound": "시나리오가 맞으면 가격이 가는 곳 (복리)",
   "mode_mean": "기대값 (산술 평균)",
-  "mode_hint": "복리로 읽으면 변동성은 가격의 흔들림만 키웁니다. 기대값으로 읽으면 변동성의 제곱의 절반만큼 복리 성장률이 낮아집니다."
+  "mode_hint": "기대값으로 읽으면 변동성의 제곱의 절반만큼 복리 성장률이 낮아집니다. 복리로 읽으면 변동성은 가격의 흔들림만 키웁니다."
  },
  "en": {
   "title": "When to sell · a stop-loss calculator",
@@ -223,6 +223,6 @@
   "f_mode": "What the return means",
   "mode_compound": "Where the price goes if the scenario is right (compound)",
   "mode_mean": "An expected value (arithmetic mean)",
-  "mode_hint": "Read as compound, volatility only adds noise around the path. Read as an expected value, compound growth is lower by half the squared volatility."
+  "mode_hint": "Read as an expected value, compound growth is lower by half the squared volatility. Read as compound, volatility only adds noise around the path."
  }
 }
